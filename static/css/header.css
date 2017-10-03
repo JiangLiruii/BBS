@@ -1,0 +1,53 @@
+.pg-header {
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    position: fixed;
+    height: 44px;
+    background-color: #2459a2;
+}
+
+.head-content {
+    width: 1016px;
+    margin: 0 auto;
+    line-height: 44px;
+    position: relative;
+    height: 44px;
+    background-color: #2459a2;
+}
+.digg-logo {
+    width: 121px;
+    height: 23px;
+    background: url(/static/img/logo.png) no-repeat 0 0;
+    float: left;
+    margin-top: 11px;
+}
+
+.action-menu {
+    float: left;
+    margin-left: 20px;
+    font-size: 12px;
+}
+
+.action-menu a.active {
+    color: #fff;
+    background-color: #204982;
+}
+ .action-menu a.tb:hover{
+     color: #fff;
+     background-color:cornflowerblue;
+     opacity:0.9;
+     z-index: 101;
+ }
+
+
+.action-menu a.tb {
+    color: #c0cddf;
+    margin-left: -3px;
+    padding: 0 13px 0 16px;
+    display: inline-block;
+}
+a {
+    text-decoration: none;
+}
