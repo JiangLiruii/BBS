@@ -7,7 +7,13 @@
     height: 44px;
     background-color: #2459a2;
 }
-
+.hide{
+    display: none;
+}
+.part4{
+    background-color: #c0cddf;
+    font-size: small;
+}
 .head-content {
     width: 1016px;
     margin: 0 auto;
@@ -15,8 +21,10 @@
     position: relative;
     height: 44px;
     background-color: #2459a2;
+
 }
 .digg-logo {
+
     width: 121px;
     height: 23px;
     background: url(/static/img/logo.png) no-repeat 0 0;
@@ -50,4 +58,22 @@
 }
 a {
     text-decoration: none;
+}
+.pg-body{
+    margin-top: 44px ;
+}
+.main-content {
+    width: 960px;
+    margin: 0 auto;
+    overflow: hidden;
+    height: auto !important;
+    min-height: 713px;
+    padding: 6px 28px 60px;
+    background-color: lightgoldenrodyellow;
+}
+.main-content .content-L {
+    width: 630px;
+    overflow: hidden;
+    margin-top: 3px;
+    float: left;
 }

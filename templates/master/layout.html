@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/BBS.css">
+    {% block css %}{% endblock %}
+</head>
+<body>
+    <div class="pg-header">
+        {% block header %}{% endblock %}
+    </div>
+    <div class="pg-body">
+        {% block body %}{% endblock %}
+    </div>
+    <div class="pg-footer">
+        <div class="w"></div>
+
+    </div>
+<script src="/static/js/jquery-3.2.1.js"></script>
+{% block js %}{% endblock %}
+</body>
+</html>

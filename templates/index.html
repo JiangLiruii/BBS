@@ -1,27 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link href="/static/css/header.css" rel="stylesheet">
-</head>
-<body>
-    <div class="pg-header">
-        <div class="head-content">
-            <a href="/" class="digg-logo"></a>
-            <div class="action-menu">
-				<a class="tb active">全部</a>
-                <a class="tb">42区</a>
-                <a class="tb">段子</a>
-                <a class="tb">图片</a>
-                <a class="tb">挨踢1024</a>
-                <a class="tb">你问我答</a>
-			</div>
+{% extends 'master/layout.html' %}
+{% block header %}
+    <style type="text/css">
+        .part4 {
+        }
+    </style>
+    <div class="head-content">
+        <a href="/" class="digg-logo"></a>
+        <div class="action-menu">
+        <a class="tb active">全部</a>
+        <a class="tb">42区</a>
+        <a class="tb">段子</a>
+        <a class="tb">图片</a>
+        <a class="tb">挨踢1024</a>
+        <a class="tb">你问我答</a>
         </div>
-
-
     </div>
-    <div class="pg-body"></div>
-    <div class="pg-footer"></div>
-</body>
-</html>
+{% endblock %}
+{% block body %}
+    <div class="main-content">
+    {% for item in data %}
+            <div class="content-L">
+                <div class="item">
+                <div class="part1">
+                    <a href="{{ item.url }}">{{ item.title }}</a>
+                </div>
+                <div class="part2">
+                    {{ item.summary }}
+                </div>
+                <div class="part3">
+                    <a href="#" onclick="Add_Favor(this,{{ item.id }})">赞{{ item.favor_count }}</a>
+                    <a href="#" onclick="Comment_func(this,{{ item.id }})">评论{{ item.reply_count }}</a>
+                    <span>{{ item.create_date|date:"Y-m-d H:i:s" }}</span>
+                </div>
+                <div class="part4 hide">
+                    <label>历史评论</label>
+                    <div class="replys"></div>
+                    <label>请输入评论内容</label><textarea class="comments"></textarea>
+                    <button onclick="Submit(this,{{ item.id }})">提交</button>
+                </div>
+                </div>
+            </div>
+
+    {% endfor %}
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        function Add_Favor(loc,id) {
+            $.ajax({
+                url:'/add_favor/',
+                type:'POST',
+                data:{nid : id},
+                success:function (callback) {
+                    var ret = jQuery.parseJSON(callback);
+                    if(ret.statue=1){
+                    var temp = '赞'+ret.data;
+                    console.log(temp);
+                    $(loc).text(temp)
+                    }
+                    else{
+                        alert(ret.massage)
+                    }
+                }
+            });
+        }
+       function Comment_func(loc,id) {
+            $(loc).parent().next().toggleClass('hide');
+            $.ajax({
+                data:{nid:id},
+                type:"POST",
+                url:'/comment/',
+                success:function (callback) {
+                    console.log(callback);
+                    obj = jQuery.parseJSON(callback);
+                    $('.replys').empty();
+                    $.each(obj,function (k,v) {
+                        console.log(v);
+                        temp ="<p>"+v.content+v.user__user+v.create_date+"<p>";
+                        $('.replys').append(temp);
+                    })
+                }
+            })
+       }
+       function Submit(loc,id) {
+           var comments = $(loc).prev().val();
+           console.log(comments);
+           $.ajax({
+               url:'/add_comment/',
+               data:{ncomments:comments,nid : id},
+               type:'Post',
+               success:function (callback) {
+                   ret = jQuery.parseJSON(callback);
+                   if (ret.status=1){
+                       alert("评论成功");
+                       $('.part4').removeClass('hide');
+                       location.reload();}
+
+                   else{
+                       alert("错误")
+                   }
+               }
+           })
+       }
+    </script>
+{% endblock %}
