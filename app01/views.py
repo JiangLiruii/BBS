@@ -1,6 +1,6 @@
 from django.shortcuts import render,render_to_response,HttpResponse,redirect
 from app01 import models
-
+from django.utils.safestring import mark_safe
 import json
 import datetime
 from django.core import serializers
@@ -21,9 +21,29 @@ def login(request):
 		else:
 			return render_to_response('login.html')
 	return render_to_response('login.html')
-def index(request):
-	data_all = models.News.objects.all()
-	return render_to_response('index.html',{'data':data_all})
+def try_int(args,default):
+	try:
+		return int(args)
+	except Exception:
+		return int(default)
+def index(request,page):
+	page = try_int(page,1)
+	per_page = 5
+	count = models.News.objects.all().count()
+	k,v =divmod(count,per_page)
+	if v==0:page_count = k
+	else:page_count=k+1
+	start =(page-1)*per_page
+	end = page*per_page
+	data_return = models.News.objects.all()[start:end]
+	page_list = []
+	for i in range(page_count):
+		if page==i+1:
+			page_single = "<a class='selected' href='/index/%s'>第%s页</a>"%(i+1,i+1)
+		else:page_single = "<a href='/index/%s'>第%s页</a>"%(i+1,i+1)
+		page_list.append(page_single)
+	page_string = ''.join(page_list)
+	return render_to_response('index.html',{'data':data_return,'page_count':page_count,'page_string':mark_safe(page_string)})
 
 def add_favor(request):
 	ret = {'statue':0,'data':'','massage':''}
@@ -97,4 +117,4 @@ def chat_history_new(request):
 	if len(list(obj))>0:
 		list_ret=json.dumps(list(obj),cls=CJsonEncoder)
 		return HttpResponse(list_ret)
-	return HttpResponse(None)
+	return HttpResponse()

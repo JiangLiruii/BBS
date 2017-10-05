@@ -48,7 +48,11 @@
             <input type="text" class="chat_now" placeholder="请输入聊天内容">
             <input type= "button" class="chat_submit" onclick="Submit_Chart()" value="提交">
         </div>
+    <div class="page">
+    {{ page_string }}
     </div>
+    </div>
+
 {% endblock %}
 {% block js %}
     <script type="text/javascript">
@@ -170,7 +174,8 @@
                 type:'POST',
                 data:{last_id:window.last_id},
                 success:function (callback) {
-                    if (callback) {
+                    console.log(callback.length);
+                    if (callback.length>0) {
                         var data = jQuery.parseJSON(callback);
                         if (data.length > 0) {
                             console.log(data);

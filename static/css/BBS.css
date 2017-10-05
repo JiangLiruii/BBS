@@ -115,3 +115,14 @@ a {
     height: 26px;
     margin: 3px ;
 }
+.main-content .page{
+    position: fixed;
+    bottom: 100px;
+}
+.main-content .page a{
+    background-color:antiquewhite ;
+}
+.main-content .page .selected{
+    background-color:sandybrown ;
+    color: lightgreen;
+}

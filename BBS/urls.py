@@ -19,7 +19,7 @@ from app01 import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^login/', views.login),
-    url(r'^index/', views.index),
+    url(r'^index/(\d*)', views.index),
     url(r'^add_favor/', views.add_favor),
     url(r'^comment/', views.comment),
     url(r'^add_comment/', views.add_comment),
