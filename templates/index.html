@@ -18,6 +18,7 @@
 {% endblock %}
 {% block body %}
     <div class="main-content">
+    <div class="content-news">
     {% for item in data %}
             <div class="content-L">
                 <div class="item">
@@ -40,8 +41,13 @@
                 </div>
                 </div>
             </div>
-
     {% endfor %}
+    </div>
+        <div class="content-R">
+            <div class="chat_history" ></div>
+            <input type="text" class="chat_now" placeholder="请输入聊天内容">
+            <input type= "button" class="chat_submit" onclick="Submit_Chart()" value="提交">
+        </div>
     </div>
 {% endblock %}
 {% block js %}
@@ -95,12 +101,95 @@
                        alert("评论成功");
                        $('.part4').removeClass('hide');
                        location.reload();}
-
                    else{
                        alert("错误")
                    }
                }
            })
        }
+       function Submit_Chart() {
+           var value = $('.chat_now').val();
+{#           console.log(value);#}
+           $.ajax({
+               url:'/chat/',
+               type:'POST',
+               data:{value:value},
+               success:function (callback) {
+                   var ret = jQuery.parseJSON(callback);
+                   if(ret['status']===1){
+                       console.log(ret.data);
+                        var username = ret.data.user;
+                        var content = value;
+                        var creat_date = ret.data.crate_date;
+                        var temp ='<div>'+username+'--'+content+'--'+creat_date+'</div>';
+                        console.log(temp);
+                        $('.chat_history').append(temp);
+
+                       window.last_id=ret.data.id
+                   }
+                   else{
+                       alert(ret['e'])
+                   }
+                    var height=document.getElementsByClassName('chat_history')[0].scrollHeight;
+                    $('.chat_history').scrollTop(height);
+
+               }
+           })
+
+       }
+    setInterval('going()',2000);
+    window.is_first=true;
+    function going() {
+        if(window.is_first)
+            $.ajax({
+                url:'/chat_history/',
+                type:'POST',
+                success:function (callback) {
+{#                    console.log(callback);#}
+                    var data = jQuery.parseJSON(callback);
+                    window.last_id=data[0].id;
+                    data.reverse();
+                    $.each(data,function (k,v) {
+{#                        console.log(v);#}
+                        var username = v.user__user;
+                        var content = v.content;
+                        var creat_date = v.creat_date;
+                        var temp ='<div>'+username+'--'+content+'--'+creat_date+'</div>';
+{#                        console.log(temp);#}
+                        $('.chat_history').append(temp);
+
+                    });
+                    window.is_first=false;
+                    var height=document.getElementsByClassName('chat_history')[0].scrollHeight;
+                    $('.chat_history').scrollTop(height);
+                }
+            });
+        else{
+            $.ajax({
+                url:'/chat_history_new/',
+                type:'POST',
+                data:{last_id:window.last_id},
+                success:function (callback) {
+                    if (callback) {
+                        var data = jQuery.parseJSON(callback);
+                        if (data.length > 0) {
+                            console.log(data);
+                            window.last_id = data[data.length - 1].id;
+                            console.log(window.last_id);
+                            $.each(data, function (k, v) {
+                                var username = v.user__user;
+                                var content = v.content;
+                                var creat_date = v.creat_date;
+                                var temp = '<div>' + username + '--' + content + '--' + creat_date + '</div>';
+                                $('.chat_history').append(temp)
+                            })
+                        }
+                        var height = document.getElementsByClassName('chat_history')[0].scrollHeight;
+                        $('.chat_history').scrollTop(height);
+                    }
+                }
+            })
+        }
+    }
     </script>
 {% endblock %}

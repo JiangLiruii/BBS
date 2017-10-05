@@ -23,4 +23,7 @@ urlpatterns = [
     url(r'^add_favor/', views.add_favor),
     url(r'^comment/', views.comment),
     url(r'^add_comment/', views.add_comment),
+    url(r'^chat/', views.chat),
+    url(r'^chat_history/', views.chat_history),
+    url(r'^chat_history_new/', views.chat_history_new),
 ]

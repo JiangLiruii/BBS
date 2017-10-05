@@ -12,6 +12,7 @@
 }
 .part4{
     background-color: #c0cddf;
+    padding: 2px;
     font-size: small;
 }
 .head-content {
@@ -71,9 +72,46 @@ a {
     padding: 6px 28px 60px;
     background-color: lightgoldenrodyellow;
 }
-.main-content .content-L {
+.main-content .content-news {
     width: 630px;
     overflow: hidden;
     margin-top: 3px;
     float: left;
+}
+.main-content .content-news .content-L{
+    width: 630px;
+    overflow: hidden;
+    margin-top: 3px;
+    float: left;
+}
+.main-content .content-R {
+    width: 330px;
+    overflow: hidden;
+    margin-top: 3px;
+    float: left;
+}
+.content-R .chat_history{
+    width: 310px;
+    height: 300px;
+    margin:0 10px;
+    background-color:lightpink;
+    padding: 10px;
+    overflow: scroll;
+}
+.content-R .chat_history div{
+    width: 260px;
+    margin: 0 auto;
+    border: dashed 1px;
+    background-color:pink;
+    padding: 15px;
+}
+.main-content .content-R .chat_now{
+    width: 250px;
+    height: 20px;
+    margin: 3px 2px 3px 10px;
+}
+.main-content .content-R .chat_submit{
+    width: 45px;
+    height: 26px;
+    margin: 3px ;
 }

@@ -58,8 +58,43 @@ def comment(request):
 
 def add_comment(request):
 	ret = {'status' : 0,'e':''}
-	nid = request.POST.get('nid')
-	contents = request.POST.get('ncomments')
-	obj = models.Reply.objects.create(content=contents,user=models.Admin.objects.get(id=request.session['current_user_id']),news=models.News.objects.get(id=nid))
-	ret['status'] = 1
-	return HttpResponse(json.dumps(str(ret['status'])))
+	try:
+		nid = request.POST.get('nid')
+		contents = request.POST.get('ncomments')
+		obj = models.Reply.objects.create(content=contents,user=models.Admin.objects.get(id=request.session['current_user_id']),news=models.News.objects.get(id=nid))
+		ret['status'] = 1
+	except Exception as e:
+		ret['e']=str(e)
+	return HttpResponse(json.dumps(ret))
+
+def chat(request):
+	ret = {'status': 0,'data':'', 'e': ''}
+	try:
+		chat_contents = request.POST.get('value')
+		user =models.Admin.objects.get(id=request.session['current_user_id'])
+		obj1=models.Chat.objects.create(content=chat_contents,user=user)
+		print(obj1.id,obj1.creat_date)
+		data= {'id':obj1.id,
+		       'content':obj1.content,
+		       'crate_date':obj1.creat_date,
+		       'user':user.user
+		       }
+		print(data)
+		ret['status'] = 1
+		ret['data']=data
+	except Exception as e:
+		ret['e']=str(e)
+	return HttpResponse(json.dumps(ret,cls=CJsonEncoder))
+
+def chat_history(request):
+	chat_history = models.Chat.objects.all().order_by('-id').values('id','content','user__user','creat_date')
+	return HttpResponse(json.dumps(list(chat_history),cls=CJsonEncoder))
+
+def chat_history_new(request):
+
+	last_id =request.POST.get('last_id')
+	obj =models.Chat.objects.filter(id__gt=last_id).values('id','content','user__user','creat_date')
+	if len(list(obj))>0:
+		list_ret=json.dumps(list(obj),cls=CJsonEncoder)
+		return HttpResponse(list_ret)
+	return HttpResponse(None)
